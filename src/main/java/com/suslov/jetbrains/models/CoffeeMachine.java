@@ -5,6 +5,7 @@ import com.suslov.jetbrains.utils.MessageUtil;
 import java.util.HashMap;
 
 import static com.suslov.jetbrains.models.CoffeeType.*;
+import static com.suslov.jetbrains.models.Ingredient.*;
 import static com.suslov.jetbrains.utils.MessageUtil.INCORRECT_COMMAND;
 import static com.suslov.jetbrains.utils.MessageUtil.OUTPUT_INGREDIENTS;
 
@@ -24,8 +25,28 @@ public class CoffeeMachine {
         return switchOff;
     }
 
+    public State getCurrentState() {
+        return currentState;
+    }
+
+    void setCurrentState(State currentState) {
+        this.currentState = currentState;
+    }
+
+    public HashMap<Ingredient, Integer> getIngredientStocks() {
+        return new HashMap<>(ingredientStocks);
+    }
+
+    public void initialLoad() {
+        ingredientStocks.put(WATER, 400);
+        ingredientStocks.put(MILK, 540);
+        ingredientStocks.put(BEANS, 120);
+        ingredientStocks.put(CUPS, 9);
+        ingredientStocks.put(MONEY, 550);
+    }
+
     public void requestAction() {
-        MessageUtil.toConsole(currentState);
+        MessageUtil.toConsole(currentState.requestNextUserAction());
     }
 
     public void respondUserChoice(String userChoice) {
@@ -43,11 +64,11 @@ public class CoffeeMachine {
                 processFillIngredientChoice(userChoice);
             default:
                 MessageUtil.toConsole(INCORRECT_COMMAND);
-                currentState = State.CHOOSE_ACTION;
+                setCurrentState(State.CHOOSE_ACTION);
         }
     }
 
-    private void processActionChoice(String userChoice) {
+    void processActionChoice(String userChoice) {
         switch (userChoice) {
             case "buy":
                 currentState = State.CHOOSE_TYPE_COFFEE;
@@ -69,8 +90,8 @@ public class CoffeeMachine {
         }
     }
 
-    private void processCoffeeTypeChoice(String userChoice) {
-        currentState = currentState.releaseState();
+    void processCoffeeTypeChoice(String userChoice) {
+        setCurrentState(currentState.releaseState());
         switch (userChoice) {
             case "1":
                 ESPRESSO.makeACoffee(ingredientStocks);
@@ -85,45 +106,45 @@ public class CoffeeMachine {
                 return;
             default:
                 MessageUtil.toConsole(INCORRECT_COMMAND);
-                currentState = State.CHOOSE_TYPE_COFFEE;
+                setCurrentState(State.CHOOSE_TYPE_COFFEE);
         }
     }
 
-    private void processFillIngredientChoice(String userChoice) {
+    void processFillIngredientChoice(String userChoice) {
         switch (currentState) {
             case FILL_WATER:
                 if (fillOutIngredient(Ingredient.WATER, userChoice)) {
-                    currentState = State.FILL_MILK;
+                    setCurrentState(State.FILL_MILK);
                 }
                 break;
             case FILL_MILK:
                 if (fillOutIngredient(Ingredient.MILK, userChoice)) {
-                    currentState = State.FILL_BEANS;
+                    setCurrentState(State.FILL_BEANS);
                 }
                 break;
             case FILL_BEANS:
                 if (fillOutIngredient(Ingredient.BEANS, userChoice)) {
-                    currentState = State.FILL_CUPS;
+                    setCurrentState(State.FILL_CUPS);
                 }
                 break;
             case FILL_CUPS:
                 if (fillOutIngredient(Ingredient.CUPS, userChoice)) {
-                    currentState = currentState.releaseState();
+                    setCurrentState(currentState.releaseState());
                 }
                 break;
             default:
                 MessageUtil.toConsole(INCORRECT_COMMAND);
-                currentState = currentState.releaseState();
+                setCurrentState(currentState.releaseState());
         }
     }
 
-    private void takeOutAllMoney() {
+    void takeOutAllMoney() {
         int rest = ingredientStocks.getOrDefault(Ingredient.MONEY, 0);
         MessageUtil.toConsole(String.format("\nI gave you $%d\n", rest));
         ingredientStocks.put(Ingredient.MONEY, 0);
     }
 
-    private void outputAmountIngredients() {
+    void outputAmountIngredients() {
         MessageUtil.toConsole(OUTPUT_INGREDIENTS);
         for (Ingredient element : Ingredient.values()) {
             String ingredientRemainder = element.remainderRepresentation(ingredientStocks.get(element));
@@ -131,7 +152,7 @@ public class CoffeeMachine {
         }
     }
 
-    private boolean fillOutIngredient(Ingredient ingredient, String value) {
+    boolean fillOutIngredient(Ingredient ingredient, String value) {
         if (ingredient != Ingredient.MONEY) {
             try {
                 int newValue = ingredientStocks.getOrDefault(ingredient, 0) + Integer.parseInt(value);

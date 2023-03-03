@@ -11,10 +11,6 @@ public class MessageUtil {
     public static final String ENOUGH = "I have enough resources, making you a coffee!\n";
     public static final String INCORRECT_COMMAND = "Incorrect input command";
 
-    public static void toConsole(CoffeeMachine.State state) {
-        System.out.println(state.requestNextUserAction());
-    }
-
     public static void toConsole(String message) {
         System.out.println(message);
     }

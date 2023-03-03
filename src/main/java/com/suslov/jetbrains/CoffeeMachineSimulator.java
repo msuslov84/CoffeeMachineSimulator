@@ -25,6 +25,7 @@ public class CoffeeMachineSimulator {
 
     public void launch() {
         CoffeeMachine coffeeMachine = new CoffeeMachine();
+        coffeeMachine.initialLoad();
         while (!coffeeMachine.isSwitchOff()) {
             coffeeMachine.requestAction();
             coffeeMachine.respondUserChoice(scanner.nextLine());
