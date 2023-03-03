@@ -62,6 +62,7 @@ public class CoffeeMachine {
             case FILL_BEANS:
             case FILL_CUPS:
                 processFillIngredientChoice(userChoice);
+                break;
             default:
                 MessageUtil.toConsole(INCORRECT_COMMAND);
                 setCurrentState(State.CHOOSE_ACTION);
@@ -86,7 +87,7 @@ public class CoffeeMachine {
                 switchOff = true;
                 break;
             default:
-                System.out.println(INCORRECT_COMMAND);
+                MessageUtil.toConsole(INCORRECT_COMMAND);
         }
     }
 
