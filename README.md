@@ -7,10 +7,10 @@ simulator. The machine works with typical products: coffee, milk, sugar, and pla
 if it runs out of something, it shows a notification. We can get three types of coffee: espresso, 
 cappuccino and latte. Since nothing’s for free, it also collects the money.
 ### Description:
-This project has allowed me to better understand the basic OOP, its main concepts such as classes, 
-class methods and attributes, and I've learned possibilities of enumerations.
+In this project I've learned specific possibilities of enumerations and nested classes.
 ### Launch example:
 * java -jar CoffeeMachineSimulator.jar
 ### Technical information:
 * Java 8 (Oracle OpenJDK version 1.8.0_311)
 * JUnit 4.13.2
+* Maven 3.8.6
