@@ -13,4 +13,4 @@ In this project I've learned specific possibilities of enumerations and nested c
 ### Technical information:
 * Java 8 (Oracle OpenJDK version 1.8.0_311)
 * JUnit 4.13.2
-* Maven 3.8.6
+* Apache Maven 3.8.6
